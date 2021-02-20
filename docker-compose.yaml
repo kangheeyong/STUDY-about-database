@@ -1,0 +1,30 @@
+version: "3"
+
+volumes:
+  dbdata:
+
+services:
+  example:
+    restart: always
+    build: .
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    volumes:
+      - ./example:/example
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    command: bash
+
+  mongodb:
+    restart: always
+    image: mongo:4.2.8
+    env_file:
+      - .env
+    ports:
+      - "47017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - dbdata:/data/db

@@ -1,0 +1,56 @@
+{
+    "queryPlanner": {
+        "plannerVersion": 1,
+        "namespace": "test.case1",
+        "indexFilterSet": false,
+        "parsedQuery": {
+            "c": {
+                "$eq": "c-1"
+            }
+        },
+        "winningPlan": {
+            "stage": "COLLSCAN",
+            "filter": {
+                "c": {
+                    "$eq": "c-1"
+                }
+            },
+            "direction": "forward"
+        },
+        "rejectedPlans": []
+    },
+    "executionStats": {
+        "executionSuccess": true,
+        "nReturned": 100,
+        "executionTimeMillis": 8,
+        "totalKeysExamined": 0,
+        "totalDocsExamined": 10000,
+        "executionStages": {
+            "stage": "COLLSCAN",
+            "filter": {
+                "c": {
+                    "$eq": "c-1"
+                }
+            },
+            "nReturned": 100,
+            "executionTimeMillisEstimate": 0,
+            "works": 10002,
+            "advanced": 100,
+            "needTime": 9901,
+            "needYield": 0,
+            "saveState": 78,
+            "restoreState": 78,
+            "isEOF": 1,
+            "direction": "forward",
+            "docsExamined": 10000
+        },
+        "allPlansExecution": []
+    },
+    "serverInfo": {
+        "host": "bb8d0dd2c726",
+        "port": 27017,
+        "version": "4.2.8",
+        "gitVersion": "43d25964249164d76d5e04dd6cf38f6111e21f5f"
+    },
+    "ok": 1.0
+}

@@ -1,0 +1,100 @@
+{
+    "queryPlanner": {
+        "plannerVersion": 1,
+        "namespace": "test.case2",
+        "indexFilterSet": false,
+        "parsedQuery": {
+            "c": {
+                "$eq": "c-1"
+            }
+        },
+        "winningPlan": {
+            "stage": "FETCH",
+            "inputStage": {
+                "stage": "IXSCAN",
+                "keyPattern": {
+                    "c": 1
+                },
+                "indexName": "c_1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                    "c": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                    "c": [
+                        "[\"c-1\", \"c-1\"]"
+                    ]
+                }
+            }
+        },
+        "rejectedPlans": []
+    },
+    "executionStats": {
+        "executionSuccess": true,
+        "nReturned": 100,
+        "executionTimeMillis": 0,
+        "totalKeysExamined": 100,
+        "totalDocsExamined": 100,
+        "executionStages": {
+            "stage": "FETCH",
+            "nReturned": 100,
+            "executionTimeMillisEstimate": 0,
+            "works": 101,
+            "advanced": 100,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 0,
+            "restoreState": 0,
+            "isEOF": 1,
+            "docsExamined": 100,
+            "alreadyHasObj": 0,
+            "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 100,
+                "executionTimeMillisEstimate": 0,
+                "works": 101,
+                "advanced": 100,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 0,
+                "restoreState": 0,
+                "isEOF": 1,
+                "keyPattern": {
+                    "c": 1
+                },
+                "indexName": "c_1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                    "c": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                    "c": [
+                        "[\"c-1\", \"c-1\"]"
+                    ]
+                },
+                "keysExamined": 100,
+                "seeks": 1,
+                "dupsTested": 0,
+                "dupsDropped": 0
+            }
+        },
+        "allPlansExecution": []
+    },
+    "serverInfo": {
+        "host": "bb8d0dd2c726",
+        "port": 27017,
+        "version": "4.2.8",
+        "gitVersion": "43d25964249164d76d5e04dd6cf38f6111e21f5f"
+    },
+    "ok": 1.0
+}

@@ -1,0 +1,7 @@
+*.un~
+*.swp
+*.so
+*.pyc
+__pycache__
+.DS_Store
+db_data
