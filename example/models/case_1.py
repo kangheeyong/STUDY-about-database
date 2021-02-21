@@ -14,7 +14,7 @@ class BaseCase(object):
     def make_dateset(cls):
         cls.objects.delete()
         for i in range(10000):
-            cls.objects.create(a=f"a-{i}", b=f"b-{i}", c=f"c-{i%100}")
+            cls.objects.create(a=f"a-{i}", b=f"b-{i%10}", c=f"c-{i%100}")
 
 
 class Case1(Document, BaseCase):
