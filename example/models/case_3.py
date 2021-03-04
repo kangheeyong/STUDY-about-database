@@ -1,5 +1,5 @@
 from mongoengine import Document, EmbeddedDocument
-from mongoengine.fields import StringField, EmbeddedDocumentListField, DictField
+from mongoengine.fields import StringField, EmbeddedDocumentListField, DictField, ListField
 
 
 class EmbeddedBaseCase(EmbeddedDocument):
@@ -16,6 +16,7 @@ class BaseCase(Document):
     c = StringField()
     d = EmbeddedDocumentListField(EmbeddedBaseCase)
     e = DictField()
+    f = ListField()
 
     def __str__(self):
         return f"a: {self.a}, b: {self.b}, c: {self.c}, d: {self.d[:1]} * {len(self.d)}, e: {self.e}"
@@ -44,5 +45,7 @@ class BaseCase(Document):
                     "e_1": f"a-{i}",
                     "e_2": f"a-{i%10}",
                     "e_3": f"a-{i%100}"
-                }
+                },
+                f=[i for i in range(5)]
+
             )

@@ -9,6 +9,10 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from models.case_3 import BaseCase
 
+# data setting time: 4.423297166824341
+# bulk update at mongoengine: 416.9906141757965
+# bulk update using aggregate: 0.08883404731750488
+# 약 5000배 속도 향상
 
 if __name__ == '__main__':
     t = time.time()    
@@ -30,7 +34,7 @@ if __name__ == '__main__':
         }
     }
     t = time.time()  
-    obj = BaseCase._get_collection().update_many({},[pipe])
+    obj = BaseCase._get_collection().update_many({}, [pipe])
     print(f"bulk update using aggregate: {time.time() - t}")
     
     breakpoint()
