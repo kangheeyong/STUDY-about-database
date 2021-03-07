@@ -14,6 +14,7 @@ connect(os.environ.get('MONGO_DB_NAME', "test"), host=os.environ.get('MONGO_HOST
 
 NOW = datetime(2021, 3, 7, 0, 0, 0)
 SECOND = 0
+DELETE_COUNT = 200
 
 
 U = TypeVar("U", bound=Document)
@@ -139,3 +140,48 @@ class BucketPattern(Document):
 
         SECOND += 1
 
+    @classmethod
+    def delete_using_mongoengine_v1(cls, date_time: datetime=NOW - timedelta(days=1)):
+        try:
+            obj = cls.objects.get(date_time=date_time)
+        except DoesNotExist:
+            obj = cls.objects.create(date_time=date_time)
+
+        for idx in range(len(obj.measurements)-1, -1, -1):
+            if obj.measurements[idx].time_stamp < NOW - timedelta(days=1) + timedelta(seconds=DELETE_COUNT):
+                del obj.measurements[idx]
+                obj.count -= 1
+        obj.save()
+
+    @classmethod
+    def delete_using_pymongo(cls, date_time: datetime=NOW - timedelta(days=1)):
+        global SECOND
+
+        _filter = {'date_time': date_time}
+        _update = {
+            "$pull": {
+                "measurements": {
+                    "time_stamp": {
+                        "$lt": NOW - timedelta(days=1) + timedelta(seconds=DELETE_COUNT)
+                    }
+                }
+            }
+        }
+        cls._get_collection().update_one(
+            _filter,
+            _update,
+        )
+
+        # cls._get_collection().update_one(
+        #     _filter,
+        #     {
+        #         "$addFields": {
+        #             "count": {
+        #                 "$size": "$measurements"
+        #             }
+        #         }
+        #     },
+        #     upsert=True
+        # )
+
+        SECOND += 1
