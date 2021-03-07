@@ -13,29 +13,30 @@ from models.case_3 import BaseCase
 
 if __name__ == '__main__':
     '''
-    data setting time: 4.288562774658203
-    bulk update at mongoengine: 11.433610439300537
-    bulk update using aggregate: 0.027959823608398438
-    약 500배 속도 향상
+    아래와 같이 $unset으로 list 내에 있는 embeded document를 지우면
+    그 필드가 실제 db에 null로 치환이 되고, 이에 따라서 mongoengine에서
+    데이터를 읽어 올 때 에러가 걸린다
+
+    TODO: null로 치환이 안되게 하는 방법을 찾아보자!!
     '''
     t = time.time()    
     BaseCase.make_dataset()
     print(f"data setting time: {time.time() - t}")
 
-    t = time.time()    
-    for obj in BaseCase.objects:
-        for o in obj.d:
-            if o.y == '5-5-y':
-                o.y = "edited"
-        obj.save()
-    print(f"bulk update at mongoengine: {time.time() - t}")
+    # t = time.time()    
+    # for obj in BaseCase.objects:
+    #     for o in obj.d:
+    #         if o.y == '5-5-y':
+    #             o.y = "edited"
+    #     obj.save()
+    # print(f"bulk update at mongoengine: {time.time() - t}")
 
     #######################################################
 
     pipe_match = {}
     pipe_set = {
-        "$set": {
-            "d.$[idx].y": "updated from cmd"
+        "$unset": {
+            "d.$[idx]": 1
         }
     }
     array_filters = [
