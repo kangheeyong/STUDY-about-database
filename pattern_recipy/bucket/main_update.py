@@ -1,6 +1,6 @@
 import time
 
-from model import BucketPattern
+from model import BucketPattern, NOW
 
 
 if __name__ == '__main__':
@@ -48,6 +48,8 @@ if __name__ == '__main__':
     # BucketPattern.update_using_mongoengine_v1(temperature=23)
     # print(f"bulk update at mongoengine_v1 after 1001: {time.time() - t}")
 
+    # assert 1002 == BucketPattern.objects.get(date_time=NOW).count
+
 ################################################
 
     # t = time.time()
@@ -63,6 +65,8 @@ if __name__ == '__main__':
     # BucketPattern.update_using_mongoengine_v2(temperature=23)
     # print(f"bulk update at mongoengine_v2 after 1001: {time.time() - t}")
 
+    # assert 1002 == BucketPattern.objects.get(date_time=NOW).count
+
 ##################################################
 
     t = time.time()
@@ -77,5 +81,7 @@ if __name__ == '__main__':
     t = time.time()
     BucketPattern.update_using_pymongo(temperature=23)
     print(f"bulk update at pymongo after 1001: {time.time() - t}")
+
+    assert 1002 == BucketPattern.objects.get(date_time=NOW).count
 
     breakpoint()

@@ -1,16 +1,28 @@
+from __future__ import annotations # mongoengine Document를 typing으로 하기 휘새 필요하다
+
 import os
 import random
+from typing import Optional, Type, TypeVar, Generic, Union
 from datetime import datetime, timedelta
 
-from mongoengine import connect, Document, EmbeddedDocument, DoesNotExist
+from mongoengine import connect, QuerySet, Document, EmbeddedDocument, DoesNotExist
 from mongoengine.fields import *
 
 
-connect(os.environ.get('MONGO_DB_NAME'), host=os.environ.get('MONGO_HOST'))
+connect(os.environ.get('MONGO_DB_NAME', "test"), host=os.environ.get('MONGO_HOST' ""))
 
 
 NOW = datetime(2021, 3, 7, 0, 0, 0)
 SECOND = 0
+
+
+U = TypeVar("U", bound=Document)
+
+
+class QuerySetManager(Generic[U]):
+    def __get__(self, instance: object, cls: Type[U]) -> QuerySet[U]:
+        return QuerySet(cls, cls._get_collection())
+
 
 class Measurement(EmbeddedDocument):
     time_stamp = DateTimeField()
@@ -25,6 +37,8 @@ class BucketPattern(Document):
     measurements = EmbeddedDocumentListField(Measurement)
     count = IntField(default=0)
 
+    objects = QuerySetManager["BucketPattern"]()
+
     meta = {
         'indexes': [
            '-date_time'
@@ -33,7 +47,7 @@ class BucketPattern(Document):
 
     def __str__(self):
         return f"date_time: {self.date_time}, measurements: {self.measurements[:1]}, count: {self.count}"
-    
+
     @classmethod
     def make_dataset(cls):
         cls.objects.delete()
@@ -41,7 +55,7 @@ class BucketPattern(Document):
         for i in range(100, 0, -1):
             days = NOW - timedelta(days=i)
             embd = []
-            for j in range(0, random.randint(0, 3599)):
+            for j in range(0, random.randint(600, 3599)):
                 embd.append(
                     Measurement(
                         time_stamp = days + timedelta(seconds=j),
@@ -56,7 +70,14 @@ class BucketPattern(Document):
             )
 
     @classmethod
-    def update_using_mongoengine_v1(cls, temperature, date_time=NOW):
+    def get_obj(cls, date_time: datetime=NOW - timedelta(days=1)) -> Optional[BucketPattern]:
+        try:
+            return cls.objects.get(date_time=date_time)
+        except DoesNotExist:
+            return None
+
+    @classmethod
+    def update_using_mongoengine_v1(cls, temperature: int, date_time: datetime=NOW):
         global SECOND
 
         try:
@@ -76,7 +97,7 @@ class BucketPattern(Document):
         SECOND += 1
 
     @classmethod
-    def update_using_mongoengine_v2(cls, temperature, date_time=NOW):
+    def update_using_mongoengine_v2(cls, temperature: int, date_time: datetime=NOW):
         global SECOND
 
         try:
@@ -95,7 +116,7 @@ class BucketPattern(Document):
         SECOND += 1
 
     @classmethod
-    def update_using_pymongo(cls, temperature, date_time=NOW):
+    def update_using_pymongo(cls, temperature: int, date_time: datetime=NOW):
         global SECOND
         
         _filter = {'date_time': date_time}
