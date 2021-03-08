@@ -155,33 +155,30 @@ class BucketPattern(Document):
 
     @classmethod
     def delete_using_pymongo(cls, date_time: datetime=NOW - timedelta(days=1)):
-        global SECOND
-
         _filter = {'date_time': date_time}
-        _update = {
-            "$pull": {
-                "measurements": {
-                    "time_stamp": {
-                        "$lt": NOW - timedelta(days=1) + timedelta(seconds=DELETE_COUNT)
+        _update = [
+            {
+                "$set": {
+                    "measurements": {
+                        "$filter": {
+                            "input": "$measurements",
+                            "as": "item",
+                            "cond": {
+                                "$gte": ["$$item.time_stamp", NOW - timedelta(days=1) + timedelta(seconds=DELETE_COUNT)]
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "$set": {
+                    "count": {
+                        "$size": "$measurements"
                     }
                 }
             }
-        }
+        ]
         cls._get_collection().update_one(
             _filter,
-            _update,
+            _update
         )
-
-        # cls._get_collection().update_one(
-        #     _filter,
-        #     {
-        #         "$addFields": {
-        #             "count": {
-        #                 "$size": "$measurements"
-        #             }
-        #         }
-        #     },
-        #     upsert=True
-        # )
-
-        SECOND += 1
