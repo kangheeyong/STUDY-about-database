@@ -17,9 +17,10 @@ class BaseCase(Document):
     d = EmbeddedDocumentListField(EmbeddedBaseCase)
     e = DictField()
     f = ListField()
+    g = ListField(StringField())
 
     def __str__(self):
-        return f"a: {self.a}, b: {self.b}, c: {self.c}, d: {self.d[:1]} * {len(self.d)}, e: {self.e}"
+        return f"a: {self.a}, b: {self.b}, c: {self.c}, d: {self.d[:1]} * {len(self.d)}, e: {self.e[:1]}, g: {self.g[:1]}"
     
     @classmethod
     def make_dataset(cls):
@@ -46,6 +47,6 @@ class BaseCase(Document):
                     "e_2": f"a-{i%10}",
                     "e_3": f"a-{i%100}"
                 },
-                f=[i for i in range(5)]
-
+                f=[i for i in range(5)],
+                g=[str(i) for i in range(1000)]
             )
