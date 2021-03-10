@@ -1,7 +1,7 @@
 {
     "queryPlanner": {
         "plannerVersion": 1,
-        "namespace": "test.case4",
+        "namespace": "test.case1",
         "indexFilterSet": false,
         "parsedQuery": {
             "c": {
@@ -22,7 +22,7 @@
     "executionStats": {
         "executionSuccess": true,
         "nReturned": 100,
-        "executionTimeMillis": 8,
+        "executionTimeMillis": 3,
         "totalKeysExamined": 0,
         "totalDocsExamined": 10000,
         "executionStages": {
@@ -47,7 +47,7 @@
         "allPlansExecution": []
     },
     "serverInfo": {
-        "host": "bb8d0dd2c726",
+        "host": "ccd05c71561c",
         "port": 27017,
         "version": "4.2.8",
         "gitVersion": "43d25964249164d76d5e04dd6cf38f6111e21f5f"

@@ -14,17 +14,17 @@ if __name__ == '__main__':
     Case4.make_dateset()
 
     data = Case1.objects.filter(c="c-1").explain()
-    with open('data_1.json', 'w') as fp:
+    with open('3_0_basic/data_1.json', 'w') as fp:
         json.dump(data, fp, indent=4)
-    
+
     data = Case2.objects.filter(c="c-1").explain()
-    with open('data_2.json', 'w') as fp:
+    with open('3_0_basic/data_2.json', 'w') as fp:
         json.dump(data, fp, indent=4)
-    
+
     data = Case3.objects.filter(c="c-1").explain()
-    with open('data_3.json', 'w') as fp:
+    with open('3_0_basic/data_3.json', 'w') as fp:
         json.dump(data, fp, indent=4)
-    
+
     data = Case4.objects.filter(c="c-1").explain()
-    with open('data_4.json', 'w') as fp:
+    with open('3_0_basic/data_4.json', 'w') as fp:
         json.dump(data, fp, indent=4)

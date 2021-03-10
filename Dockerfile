@@ -4,6 +4,8 @@ RUN apt-get update
 RUN pip install --upgrade pip
 
 RUN pip install mongoengine
+RUN pip install mongo-types
+RUN pip install mypy
 
 RUN mkdir -p /example
 
