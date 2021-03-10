@@ -43,3 +43,10 @@ class Case4(Document, BaseCase):
            ('a', 'c') 
         ]
     }
+
+class Case5(Document, BaseCase):
+    meta = {
+        'indexes': [
+           ('_id', 'a')
+        ]
+    }
