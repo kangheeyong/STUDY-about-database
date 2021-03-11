@@ -2,6 +2,7 @@ version: "3"
 
 volumes:
   dbdata:
+  pgdata:
 
 services:
   example:
@@ -12,7 +13,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./example:/example
+      - ./mongo_example:/example
+      - ./postgres_example:/postgres_example
       - ./pattern_recipy:/pattern_recipy
     stdin_open: true # docker run -i
     tty: true # docker run -t
@@ -29,3 +31,18 @@ services:
       - "27017"
     volumes:
       - dbdata:/data/db
+    
+  postgres:
+    restart: always
+    image: postgres:alpine
+    env_file:
+      - .env
+    environment:
+      TZ: "Asia/Seoul"
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "45432:5432"
+    expose:
+      - "5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
