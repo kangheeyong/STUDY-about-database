@@ -38,8 +38,8 @@ services:
     env_file:
       - .env
     environment:
+      POSTGRES_PASSWORD: password
       TZ: "Asia/Seoul"
-      POSTGRES_PASSWORD: "password"
     ports:
       - "45432:5432"
     expose:
