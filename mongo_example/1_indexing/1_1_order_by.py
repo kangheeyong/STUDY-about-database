@@ -9,13 +9,13 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from models.case_1 import Case1, Case5
 
 
-if __name__ == '__main__':
-    '''
+if __name__ == "__main__":
+    """
     data setting time: 13.09441065788269
     Case5 result: 8.487701416015625e-05
     Case1 result: 8.392333984375e-05
-    '''
-    t = time.time()    
+    """
+    t = time.time()
     Case5.make_dateset()
     Case1.make_dateset()
     print(f"data setting time: {time.time() - t}")
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     data1 = Case5.objects.filter(id__in=objs5[:20]).order_by("a").explain()
     data2 = Case5.objects.filter(id__in=objs5[:20]).order_by("a").limit(5).explain()
 
-    t = time.time()    
+    t = time.time()
     obj = Case5.objects.filter(id__in=objs5).order_by("a").limit(100)
     print(f"Case5 result: {time.time() - t}")
 

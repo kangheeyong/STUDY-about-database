@@ -22,31 +22,16 @@ class Case1(Document, BaseCase):
 
 
 class Case2(Document, BaseCase):
-    meta = {
-        'indexes': [
-           'c' 
-        ]
-    }
+    meta = {"indexes": ["c"]}
 
 
 class Case3(Document, BaseCase):
-    meta = {
-        'indexes': [
-           ('c', 'a') 
-        ]
-    }
+    meta = {"indexes": [("c", "a")]}
 
 
 class Case4(Document, BaseCase):
-    meta = {
-        'indexes': [
-           ('a', 'c') 
-        ]
-    }
+    meta = {"indexes": [("a", "c")]}
+
 
 class Case5(Document, BaseCase):
-    meta = {
-        'indexes': [
-           ('_id', 'a')
-        ]
-    }
+    meta = {"indexes": [("_id", "a")]}
