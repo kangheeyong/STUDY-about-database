@@ -1,0 +1,35 @@
+mongo-url = "mongodb://mongodb1:27017,mongodb2:27017,mongodb3:27017/replicaSet=rp0"
+
+elasticsearch-urls = ["http://elasticsearch:9200"]
+
+elasticsearch-max-conns = 4
+
+elasticsearch-max-seconds = 5
+
+elasticsearch-max-bytes = 8000000
+
+dropped-collections = true
+
+dropped-databases = false
+
+namespace-regex = "^test"
+direct-read-namespaces = ["test.test_collection"]
+
+[[mapping]]
+namespace = "test.test_collection"
+index = "test_collection"
+
+
+[[script]]
+namespace = "test.test_collection"
+script = """
+module.exports = function(doc) {
+  var newdoc = {
+     number : doc.number,
+     hash : doc.hash,
+     array : doc.array,
+     timestamp: doc.timestamp,
+  }
+  return newdoc;
+}
+"""

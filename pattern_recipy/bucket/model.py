@@ -9,8 +9,12 @@ from mongoengine import connect, QuerySet, Document, EmbeddedDocument, DoesNotEx
 from mongoengine.fields import *
 
 
-connect(os.environ.get("MONGO_DB_NAME", "test"), host=os.environ.get("MONGO_HOST" ""))
-
+connect(
+    os.environ.get("MONGO_DB_NAME", "test"),
+    host=os.environ.get("MONGO_HOST", ""),
+    replicaset="rp0",
+    read_preference=ReadPreference.SECONDARY_PREFERRED,
+)
 
 NOW = datetime(2021, 3, 7, 0, 0, 0)
 SECOND = 0

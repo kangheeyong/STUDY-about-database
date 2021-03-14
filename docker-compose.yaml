@@ -1,26 +1,28 @@
 version: "3"
 
 volumes:
-  dbdata:
+  mongo1data:
+  mongo2data:
+  mongo3data:
   pgdata:
+  esdata:
 
 services:
   example:
     restart: always
     build: .
-    depends_on:
-      - mongodb
     env_file:
       - .env
     volumes:
       - ./mongo_example:/example
       - ./postgres_example:/postgres_example
       - ./pattern_recipy:/pattern_recipy
+      - ./elasticsearch_example:/elasticsearch_example
     stdin_open: true # docker run -i
     tty: true # docker run -t
     command: bash
 
-  mongodb:
+  mongodb1:
     restart: always
     image: mongo:4.2.8
     env_file:
@@ -30,8 +32,42 @@ services:
     expose:
       - "27017"
     volumes:
-      - dbdata:/data/db
-    
+      - mongo1data:/data/db
+    command: mongod --replSet rp0
+
+  mongodb2:
+    restart: always
+    image: mongo:4.2.8
+    env_file:
+      - .env
+    ports:
+      - "47018:27017"
+    expose:
+      - "27017"
+    volumes:
+      - mongo2data:/data/db
+    command: mongod --replSet rp0
+
+  mongodb3:
+    restart: always
+    image: mongo:4.2.8
+    env_file:
+      - .env
+    ports:
+      - "47019:27017"
+    expose:
+      - "27017"
+    volumes:
+      - mongo3data:/data/db
+    command: mongod --replSet rp0
+
+  mongosetup:
+    build: ./ELK/mongodb
+    depends_on:
+      - mongodb1
+      - mongodb2
+      - mongodb3
+
   postgres:
     restart: always
     image: postgres:alpine
@@ -46,3 +82,56 @@ services:
       - "5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
+
+  elasticsearch:
+    restart: always
+    build:
+      context: ./ELK/elasticsearch
+      args:
+        ELK_VERSION: $ELK_VERSION
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: password
+      discovery.type: single-node
+    env_file:
+      - .env
+    volumes:
+      - ./ELK/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "49200:9200"
+      - "49300:9300"
+    expose:
+      - "9200"
+      - "9300"
+
+  kibana:
+    restart: always
+    build:
+      context: ./ELK/kibana
+      args:
+        ELK_VERSION: $ELK_VERSION
+    env_file:
+      - .env
+    volumes:
+      - ./ELK/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - "45601:5601"
+    depends_on:
+      - elasticsearch
+
+  monstache:
+    build:
+      context: ./ELK/monstache
+      args:
+        MONSTACHE_VERSION: $MONSTACHE_VERSION
+    env_file:
+      - .env
+    depends_on:
+      - elasticsearch
+      - mongodb1
+      - mongodb2
+      - mongodb3
+    volumes:
+      - ./ELK/monstache/config/monstache.config.toml:/monstache.config.toml
+    command: -f ./monstache.config.toml
