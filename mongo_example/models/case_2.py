@@ -2,7 +2,7 @@ from typing import Type
 from datetime import datetime, timedelta
 
 from mongoengine import Document
-from mongoengine.fields import StringField, LazyReferenceField, DateTimeField
+from mongoengine.fields import StringField, LazyReferenceField, DateTimeField, IntField
 
 
 DEFAULT_NOW = datetime(2000, 1, 1, 0, 0, 0)
@@ -33,6 +33,7 @@ class Case1_1(Document, BaseCase1):
 class Case1_2(Document, BaseCase2):
     d = LazyReferenceField(Case1_1)
     e = DateTimeField()
+    f = IntField()
 
     def __str__(self):
         return f"a: {self.a}, b: {self.b}, c: {self.c}, d: {self.d}, e: {self.e}"
@@ -49,4 +50,5 @@ def make_dateset(model_1: Type[Case1_1], model_2: Type[Case1_2]) -> None:
             c=f"2-c-{i%100}",
             d=obj,
             e=DEFAULT_NOW + timedelta(days=i),
+            f=i
         )
