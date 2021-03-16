@@ -52,3 +52,21 @@ class BaseCase(Document):
                 f=[i for i in range(5)],
                 g=[str(i) for i in range(1000)],
             )
+
+
+class BaseCase1(Document):
+    a = StringField()
+    b = DictField()
+
+    def __str__(self):
+        return f"a: {self.a}, b: {self.b}"
+
+    @classmethod
+    def make_dataset(cls):
+        cls.objects.delete()
+
+        for i in range(10000):
+            cls.objects.create(
+                a=f"a-{i}",
+                b={f"b-{i%100}": 1}
+            )

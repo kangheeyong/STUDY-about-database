@@ -7,5 +7,5 @@ connect(
     os.environ.get("MONGO_DB_NAME"),
     host=os.environ.get("MONGO_HOST"),
     replicaset="rp0",
-    read_preference=ReadPreference.SECONDARY_PREFERRED,
+    read_preference=ReadPreference.PRIMARY,
 )
