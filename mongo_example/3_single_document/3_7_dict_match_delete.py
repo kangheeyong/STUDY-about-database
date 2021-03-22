@@ -34,7 +34,10 @@ if __name__ == "__main__":
     print(f"bulk update at mongoengine: {time.time() - t}")
 
     #######################################################
-
+    #   cls.objects(
+    #       **{"project": project, f"search_sdk_faq_feedback_history__{faq_id}__exists": 1}
+    #   ).update(**{f"unset__search_sdk_faq_feedback_history__{faq_id}": 1})
+    #
     #######################################################
     # _filter = {f"b.{query}": {"$exists": True}}
     # _unset = {"$unset": f"b.{query}"}

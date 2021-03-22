@@ -42,6 +42,7 @@ class Case1_2(Document, BaseCase2):
 def make_dateset(model_1: Type[Case1_1], model_2: Type[Case1_2]) -> None:
     model_1.objects.delete()
     model_2.objects.delete()
+
     for i in range(10000):
         obj = model_1.objects.create(a=f"1-a-{i}", b=f"1-b-{i%10}", c=f"1-c-{i%100}")
         model_2.objects.create(
