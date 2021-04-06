@@ -1,5 +1,9 @@
 mongoengine
+graphene
+graphene-mongo
 mongo-types
+fastapi
+uvicorn[standard]
 
 psycopg2
 

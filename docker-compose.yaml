@@ -18,6 +18,8 @@ services:
       - ./postgres_example:/postgres_example
       - ./pattern_recipy:/pattern_recipy
       - ./elasticsearch_example:/elasticsearch_example
+    ports:
+      - "48000:8000"
     stdin_open: true # docker run -i
     tty: true # docker run -t
     command: bash
