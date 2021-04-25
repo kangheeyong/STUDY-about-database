@@ -1,6 +1,6 @@
 import time
 
-from model import BucketPattern, NOW
+from .model import BucketPattern, NOW
 
 
 if __name__ == "__main__":

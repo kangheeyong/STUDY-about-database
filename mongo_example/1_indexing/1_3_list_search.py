@@ -12,7 +12,7 @@ from models.case_1 import Case1, Case7, Case7_1
 if __name__ == "__main__":
     """
     https://docs.mongodb.com/manual/tutorial/query-array-of-documents/
-    
+
     data setting time: 216.50885486602783
     Case7_1 result: 0.008502483367919922
     Case7 result: 0.13920116424560547
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     약 15배 성능 향상
     case7_1 인덱싱 검색
-    case7 인덱싱 사용 x why?
+    case7 인덱싱 사용 x why? -> https://docs.mongodb.com/manual/core/index-partial/
     """
     t = time.time()
     Case7_1.make_dateset_v7()
@@ -35,10 +35,22 @@ if __name__ == "__main__":
     r7_1 = Case7_1.objects.filter(d__match={"z": "e-50", "y": "e-50"}).explain()
 
     t = time.time()
-    obj7 = list(Case7.objects.filter(d__match={"z": "e-50", "y": "e-50"}))
+    obj7 = list(
+        Case7.objects.filter(
+            d__match={
+                "z": {"$type": "string", "$eq": "e-50"},
+                "y": {"$type": "string", "$eq": "e-50"},
+            }
+        )
+    )
     print(f"Case7 result: {time.time() - t}")
 
-    r7 = Case7.objects.filter(d__match={"z": "e-50", "y": "e-50"}).explain()
+    r7 = Case7.objects.filter(
+        d__match={
+            "z": {"$type": "string", "$eq": "e-50"},
+            "y": {"$type": "string", "$eq": "e-50"},
+        }
+    ).explain()
 
     t = time.time()
     obj1 = list(Case1.objects.filter(d__match={"z": "e-50", "y": "e-50"}))

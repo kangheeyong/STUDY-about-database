@@ -1,6 +1,6 @@
 import time
 
-from model import BucketPattern, DELETE_COUNT
+from .model import BucketPattern, DELETE_COUNT
 
 
 if __name__ == "__main__":
