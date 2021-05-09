@@ -30,7 +30,6 @@ class BaseCase(Document):
     def make_dataset_mongoengine(cls):
 
         for i in range(5):
-            cls.objects.create(a=f"a-{str(i).zfill(3)}", b=f"b-{str(i%10).zfill(3)}", c=f"c-{str(i%100).zfill(3)}", d=embd)
             for j in range(1000):
                 try:
                     obj = cls.objects.get(a=f"a-{str(i).zfill(3)}", b=f"b-{str(i%10).zfill(3)}", c=f"c-{str(i%100).zfill(3)}")
@@ -44,36 +43,3 @@ class BaseCase(Document):
                 else:
                     embd_obj[0].cnt += 1
                 obj.save()
-    
-    @classmethod
-    def make_dataset_mongoengine_v2(cls):
-        for i in range(5):
-            for j in range(1000):
-                _match = {
-                    "$and": [{"a": f"a-{str(i).zfill(3)}"}, {"b":f"b-{str(i%10).zfill(3)}"}, {"c":f"c-{str(i%100).zfill(3)}"}]
-                }
-                _add_fields = {
-                    "$addFields": {
-                        "d": {
-                            "$addToSet": dict(EmbeddedBaseCase(grouping_key=f"y-{j%10}%x-{j%7}", z=f"z-{j}", y=f"y-{j%10}", x=f"x-{j%10}").to_mongo())
-                        }
-                    }
-                }
-                cls._get_collection().update_many(
-                    _match,
-                    [_add_fields],
-                    upsert=True
-                )
-                # obj = cls.objects(a=f"a-{str(i).zfill(3)}", b=f"b-{str(i%10).zfill(3)}", c=f"c-{str(i%100).zfill(3)}")
-                # temp = EmbeddedBaseCase(grouping_key=f"y-{j%10}%x-{j%7}", z=f"z-{j}", y=f"y-{j%10}", x=f"x-{j%10}")
-                # obj.upsert_one(
-                #     d__grouping_key=f"y-{j%10}%x-{j%7}",
-                #     d__z=f"z-{j}",
-                #     d__y=f"y-{j%10}",
-                #     d__x=f"x-{j%10}",
-                #     d__cnt__inc=1
-
-                # )
-                #
-                breakpoint()
-                print("end")
