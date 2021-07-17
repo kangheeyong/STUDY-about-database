@@ -84,6 +84,7 @@ services:
       - "5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
+      - ./postgres:/postgres
 
   elasticsearch:
     restart: always
